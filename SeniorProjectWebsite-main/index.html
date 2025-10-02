@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RASD Project</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+</head>
+<body>
+ 
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#hero" class="logo"><img src="RASD  (4).png" alt="" width="130"></a>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#about">About</a></li>
+          <li><a href="#solution">Solution</a></li>
+          <li><a href="#steps">Steps</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#vision">Vision 2030</a></li>
+          <li><a href="#contact" class="btn">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+
+
+<!-- HERO with Background Video -->
+<section id="hero" class="hero">
+  <video class="back-vid" autoplay muted loop playsinline>
+    <source src="14363704_3840_2160_60fps.mp4" type="video/mp4">
+  </video>
+
+  <!-- Dark overlay -->
+  <div class="overlay"></div>
+
+  <div class="container hero-grid">
+    <div class="hero-text fade-in">
+      <h1>RASD : Real-time Autonomous Safety Detector</h1>
+      <p>Powered by AI, LiDAR, Camera & GPS forfor safer, smarter roads.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn">Sponsor Us</a>
+        <a href="#solution" class="btn-outline">See How It Works</a>
+      </div>
+    </div>
+    <div class="hero-visual float">
+      <div class="visual-placeholder">Interactive Demo</div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+  
+  <!-- ABOUT -->
+  <section id="about" class="section about-section fade-up">
+    <div class="container">
+      <div class="about-content">
+        <div class="question-side">
+          <div class="big-question-mark">?</div>
+          <h2 class="question-text">Why It Matters</h2>
+        </div>
+        <div class="answer-side">
+          <div class="answer-content">
+            <h3>The Problem</h3>
+            <p>Road defects like potholes and unmarked speed bumps increase accident risks and cost drivers <strong>thousands in repairs</strong> annually.</p>
+            <h3>Our Impact</h3>
+            <p>RASD gives drivers <strong>real-time alerts</strong> while helping governments plan <strong>smarter maintenance</strong> and create safer roads for everyone.</p>
+            <div class="impact-stats">
+              <div class="stat">
+                <span class="stat-number">33%</span>
+                <span class="stat-label">Accident Reduction</span>
+              </div>
+              <div class="stat">
+                <span class="stat-number">Lower</span>
+                <span class="stat-label">Maintenance Costs</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<!-- SOLUTION -->
+<section id="solution" class="section dark fade-up">
+  <div class="container">
+    <h2 data-aos="fade-up">RASD Features</h2>
+    <div class="card-grid">
+      <div class="card hover-zoom" data-aos="zoom-in" data-aos-delay="100">
+        <div class="feature-icon">
+          <img src="assets/images/lidar.png" alt="LiDAR Sensor" class="component-image">
+        </div>
+        <h3>Real-Time Detection</h3>
+        <p>LiDAR + Camera fusion instantly identifies potholes & speed bumps.</p>
+      </div>
+      <div class="card hover-zoom" data-aos="zoom-in" data-aos-delay="300">
+        <div class="feature-icon">
+          <img src="assets\images\ledd-removebg-preview.png" alt="LED Alert System" class="component-image">
+        </div>
+        <h3>Driver Alerts</h3>
+        <p>LED guidance: Green = Safe, Orange = Slow down, Red = Danger.</p>
+      </div>
+      <div class="card hover-zoom" data-aos="zoom-in" data-aos-delay="500">
+        <div class="feature-icon">
+          <img src="assets\images\cloud-3d.webp" alt="Cloud System" class="component-image">
+        </div>
+        <h3>Cloud Dashboard</h3>
+        <p>GPS-tagged hazards uploaded to a citywide dashboard for authorities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANIMATED STEPS -->
+<section id="steps" class="section steps-section"> 
+  <div class="container">
+    <h2>Project Development Steps</h2>
+    <div class="steps-container">
+
+      <div class="step-item" data-step="1">
+        <div class="step-circle">
+          <span class="step-number">1</span>
+        </div>
+        <div class="step-content">
+          <h3>Preparation</h3>
+          <p>Setting up the environment, collecting datasets, and preparing training data for AI model development.</p>
+        </div>
+      </div>
+      
+      <div class="step-item" data-step="2">
+        <div class="step-circle">
+          <span class="step-number">2</span>
+        </div>
+        <div class="step-content">
+          <h3>Sprint 1: Detecting</h3>
+          <p>Training computer vision models to detect potholes and speed bumps using LiDAR and camera data fusion.</p>
+        </div>
+      </div>
+      
+      <div class="step-item" data-step="3">
+        <div class="step-circle">
+          <span class="step-number">3</span>
+        </div>
+        <div class="step-content">
+          <h3>Sprint 2: Alerting</h3>
+          <p>Integrating sensors, cameras, and GPS modules with real-time LED alerts to notify drivers of road hazards.</p>
+        </div>
+      </div>
+      
+      <div class="step-item" data-step="4">
+        <div class="step-circle">
+          <span class="step-number">4</span>
+        </div>
+        <div class="step-content">
+          <h3>Sprint 3: Dashboard</h3>
+          <p>Developing a cloud-based dashboard for authorities to monitor GPS-tagged hazards and plan maintenance actions.</p>
+        </div>
+      </div>
+      
+      <div class="step-item" data-step="5">
+        <div class="step-circle">
+          <span class="step-number">5</span>
+        </div>
+        <div class="step-content">
+          <h3>Final Presentation</h3>
+          <p>Conducting real-world testing, refining the system, and presenting the solution for deployment.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- TEAM -->
+<section id="team" class="section fade-up">
+  <div class="container">
+    <h2 data-aos="fade-up">Meet the Team</h2>
+    <div class="team-grid">
+      <div class="team-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="avatar">T</div>
+        <h3>Taynam Alzamel</h3>
+        <p>AI, Robotics & Embedded Systems</p>
+      </div>
+      <div class="team-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="avatar">A</div>
+        <h3>Aljowharah Aljubair</h3>
+        <p>Computer Vision & IoT Systems</p>
+      </div>
+      <div class="team-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="avatar">J</div>
+        <h3>Jumana Almushcab</h3>
+        <p>Cybersecurity & Sustainability</p>
+      </div>
+      <div class="team-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="avatar">S</div>
+        <h3>Sarah Alkahwaji</h3>
+        <p>AI & Data Science</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+  <!-- VISION 2030 -->
+  <section id="vision" class="highlight-section fade-up">
+    <div class="container">
+      <div class="vision-content">
+        <div class="vision-logo">
+          <img src="assets\images\Saudi_Vision_2030_logo.svg.png" alt="Saudi Vision 2030 Logo" class="vision2030-logo">
+        </div>
+        <div class="vision-text">
+          <h2>Aligned with Vision 2030</h2>
+          <p>RASD supports safer mobility, AI leadership, and smarter infrastructure as part of Saudi Arabia's Vision 2030 and smart city programs like NEOM and Riyadh Smart City.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section fade-up">
+    <div class="container">
+      <h2>Get in Touch</h2>
+      <form class="contact-form">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="4" placeholder="Message"></textarea>
+        <button type="submit" class="btn">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2025 RASD Team — Prince Sultan University</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
