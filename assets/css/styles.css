@@ -201,6 +201,23 @@ body {
   font-weight: bold;
 }
 
+.team-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto 15px;
+  border: 3px solid var(--purple);
+  box-shadow: 0 8px 20px rgba(138, 43, 226, 0.3);
+  transition: all 0.4s ease;
+}
+
+.team-card:hover .team-photo {
+  transform: scale(1.1);
+  border-color: var(--silver);
+  box-shadow: 0 12px 30px rgba(138, 43, 226, 0.5);
+}
+
 /* Contact */
 .contact-form {
   display: flex;
