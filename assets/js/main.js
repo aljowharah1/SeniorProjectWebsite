@@ -37,4 +37,27 @@ revealElements.forEach((el) => revealObserver.observe(el));
 const yearEl = document.getElementById('year');
 if (yearEl) yearEl.textContent = String(new Date().getFullYear());
 
+// Animated Steps Scroll Animation (Re-triggers each time)
+const stepItems = document.querySelectorAll('.step-item');
+const stepObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      // Add a delay based on the step number for sequential animation
+      const stepNumber = parseInt(entry.target.dataset.step);
+      setTimeout(() => {
+        entry.target.classList.add('animate');
+      }, stepNumber * 100); // 100ms delay between each step
+    } else {
+      // Remove animation when out of view to allow re-triggering
+      entry.target.classList.remove('animate');
+    }
+  });
+}, { 
+  threshold: 0.3,
+  rootMargin: '-50px'
+});
+
+// Observe all step items
+stepItems.forEach((step) => stepObserver.observe(step));
+
 
