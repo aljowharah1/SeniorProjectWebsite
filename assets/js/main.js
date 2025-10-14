@@ -60,4 +60,59 @@ const stepObserver = new IntersectionObserver((entries) => {
 // Observe all step items
 stepItems.forEach((step) => stepObserver.observe(step));
 
+// EmailJS Configuration
+(function() {
+  // Initialize EmailJS with your public key
+  emailjs.init("AhpuGaMcYdXFNVZaU");
+})();
+
+// Contact Form Submission
+const contactForm = document.getElementById('contact-form');
+const formMessage = document.getElementById('form-message');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Disable submit button to prevent multiple submissions
+    const submitBtn = contactForm.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    // Send email using EmailJS
+    emailjs.sendForm(
+      'service_srxha1d',
+      'template_hstlgun',
+      this
+    )
+    .then(function(response) {
+      // Success
+      formMessage.textContent = 'Message sent successfully! We\'ll get back to you soon.';
+      formMessage.className = 'form-message success';
+      formMessage.style.display = 'block';
+      contactForm.reset();
+
+      // Re-enable button
+      submitBtn.textContent = originalBtnText;
+      submitBtn.disabled = false;
+
+      // Hide message after 5 seconds
+      setTimeout(() => {
+        formMessage.style.display = 'none';
+      }, 5000);
+    }, function(error) {
+      // Error
+      formMessage.textContent = 'Failed to send message. Please try again or contact us directly.';
+      formMessage.className = 'form-message error';
+      formMessage.style.display = 'block';
+
+      // Re-enable button
+      submitBtn.textContent = originalBtnText;
+      submitBtn.disabled = false;
+
+      console.error('EmailJS Error:', error);
+    });
+  });
+}
 
