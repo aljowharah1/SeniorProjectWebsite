@@ -82,7 +82,7 @@ if (contactForm) {
 
     // Send email using EmailJS
     emailjs.sendForm(
-      'service_srxha1d',
+      'service_i9iises',
       'template_hstlgun',
       this
     )
