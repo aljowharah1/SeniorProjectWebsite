@@ -587,14 +587,15 @@ body {
   margin: auto auto 15px;
   object-fit: cover;
   border: 3px solid transparent;
-  background: linear-gradient(white, white) padding-box,
+  background: linear-gradient(135deg, #2d1b3d, #1a0f2e, #0c0316) padding-box,
               linear-gradient(135deg, var(--purple), var(--silver)) border-box;
+  padding: 0;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .avatar:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(161, 137, 175, 0.5);
+  box-shadow: 0 8px 20px rgba(161, 137, 175, 0.5), 0 0 30px rgba(177, 156, 217, 0.4);
 }
 /* =======================
    Vision 2030 Section
