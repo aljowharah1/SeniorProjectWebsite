@@ -117,13 +117,16 @@
 
       log('Service ID: service_i9iises');
       log('Template ID: template_hstlgun');
-      log('Form data: ' + JSON.stringify({
+
+      const templateParams = {
         name: form.name.value,
         email: form.email.value,
         message: form.message.value
-      }));
+      };
 
-      emailjs.sendForm('service_i9iises', 'template_hstlgun', this)
+      log('Form data: ' + JSON.stringify(templateParams));
+
+      emailjs.send('service_i9iises', 'template_hstlgun', templateParams)
         .then(function(response) {
           log('✓ SUCCESS! Status: ' + response.status + ', Text: ' + response.text);
           messageDiv.textContent = 'Email sent successfully!';

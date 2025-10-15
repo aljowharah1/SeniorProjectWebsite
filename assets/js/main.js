@@ -80,12 +80,15 @@ if (contactForm) {
     submitBtn.textContent = 'Sending...';
     submitBtn.disabled = true;
 
+    // Get form data
+    const templateParams = {
+      name: contactForm.querySelector('input[name="name"]').value,
+      email: contactForm.querySelector('input[name="email"]').value,
+      message: contactForm.querySelector('textarea[name="message"]').value
+    };
+
     // Send email using EmailJS
-    emailjs.sendForm(
-      'service_i9iises',
-      'template_hstlgun',
-      this
-    )
+    emailjs.send('service_i9iises', 'template_hstlgun', templateParams)
     .then(function(response) {
       // Success
       formMessage.textContent = 'Message sent successfully! We\'ll get back to you soon.';
