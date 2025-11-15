@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RASD Demo Login</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0c0316 0%, #1a0f2e 100%);
+      padding: 2rem;
+    }
+
+    .login-box {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(161, 137, 175, 0.3);
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-header img {
+      width: 100px;
+      margin-bottom: 1rem;
+    }
+
+    .login-header h1 {
+      font-size: 1.8rem;
+      color: #c0c0c0;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-header p {
+      color: #a189af;
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #c0c0c0;
+      font-weight: 500;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.875rem;
+      border: 2px solid rgba(161, 137, 175, 0.3);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: rgba(26, 15, 46, 0.5);
+      color: #c0c0c0;
+      transition: border-color 0.3s;
+      box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #a189af;
+      background: rgba(26, 15, 46, 0.7);
+    }
+
+    .demo-credentials {
+      background: rgba(161, 137, 175, 0.1);
+      border-left: 4px solid #a189af;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 8px;
+    }
+
+    .demo-credentials h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 0.9rem;
+      color: #c0c0c0;
+    }
+
+    .demo-credentials p {
+      margin: 0.25rem 0;
+      font-size: 0.85rem;
+      color: #a189af;
+    }
+
+    .demo-credentials code {
+      background: rgba(26, 15, 46, 0.7);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      color: #fdc722;
+      font-weight: 600;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #a189af 0%, #8a6a9f 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(161, 137, 175, 0.4);
+      background: linear-gradient(135deg, #c0c0c0 0%, #a189af 100%);
+    }
+
+    .error-message {
+      background: rgba(220, 53, 69, 0.1);
+      color: #ff6b6b;
+      padding: 0.875rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      display: none;
+      text-align: center;
+      border: 1px solid rgba(220, 53, 69, 0.3);
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .back-link a {
+      color: #a189af;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .back-link a:hover {
+      color: #c0c0c0;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box">
+      <div class="login-header">
+        <img src="RASD  (4).png" alt="RASD Logo">
+        <h1>Pothole Logger Demo</h1>
+        <p>Riyadh Municipality Dashboard</p>
+      </div>
+
+      <div class="demo-credentials">
+        <h3>Demo Credentials:</h3>
+        <p>Username: <code>demo</code></p>
+        <p>Password: <code>rasd2025</code></p>
+      </div>
+
+      <div class="error-message" id="errorMessage">
+        Invalid credentials. Please try again.
+      </div>
+
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required autocomplete="username">
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required autocomplete="current-password">
+        </div>
+
+        <button type="submit" class="login-btn">Login to Dashboard</button>
+      </form>
+
+      <div class="back-link">
+        <a href="index.html">← Back to Main Site</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const errorMessage = document.getElementById('errorMessage');
+
+      // Simple fake authentication
+      if (username === 'demo' && password === 'rasd2025') {
+        // Store login state
+        sessionStorage.setItem('demoLoggedIn', 'true');
+        // Redirect to dashboard
+        window.location.href = 'demo-dashboard.html';
+      } else {
+        // Show error message
+        errorMessage.style.display = 'block';
+        setTimeout(() => {
+          errorMessage.style.display = 'none';
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>

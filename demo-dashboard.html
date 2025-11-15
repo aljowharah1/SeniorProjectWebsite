@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riyadh Municipality - Pothole Monitoring System</title>
+
+    <!-- Leaflet CSS for maps -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #a189af;
+            --secondary-color: #8a6a9f;
+            --success-color: #059669;
+            --warning-color: #fdc722;
+            --danger-color: #dc2626;
+            --high-color: #ea580c;
+            --medium-color: #fdc722;
+            --low-color: #84cc16;
+            --bg-color: #0c0316;
+            --card-bg: #1a0f2e;
+            --text-primary: #c0c0c0;
+            --text-secondary: #a189af;
+            --border-color: rgba(161, 137, 175, 0.3);
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0316 0%, #1a0f2e 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .header {
+            background: rgba(12, 3, 22, 0.8);
+            color: white;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            border-bottom: 2px solid rgba(161, 137, 175, 0.3);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .header-content h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header-content h2 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-card.high {
+            background: rgba(234, 88, 12, 0.4);
+            border: 2px solid rgba(234, 88, 12, 0.6);
+            box-shadow: 0 4px 20px rgba(234, 88, 12, 0.4);
+        }
+
+        .stat-card.high:hover {
+            background: rgba(234, 88, 12, 0.5);
+            box-shadow: 0 8px 30px rgba(234, 88, 12, 0.6);
+        }
+
+        .stat-card.medium {
+            background: rgba(253, 199, 34, 0.4);
+            border: 2px solid rgba(253, 199, 34, 0.6);
+            box-shadow: 0 4px 20px rgba(253, 199, 34, 0.4);
+        }
+
+        .stat-card.medium:hover {
+            background: rgba(253, 199, 34, 0.5);
+            box-shadow: 0 8px 30px rgba(253, 199, 34, 0.6);
+        }
+
+        .stat-card.pending {
+            background: rgba(161, 137, 175, 0.4);
+            border: 2px solid rgba(161, 137, 175, 0.6);
+            box-shadow: 0 4px 20px rgba(161, 137, 175, 0.4);
+        }
+
+        .stat-card.pending:hover {
+            background: rgba(161, 137, 175, 0.5);
+            box-shadow: 0 8px 30px rgba(161, 137, 175, 0.6);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        /* Section Styles */
+        .map-section,
+        .list-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(161, 137, 175, 0.3);
+            border-radius: 0.75rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(12, 3, 22, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .section-header h3 {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+        }
+
+        /* Map Styles */
+        #map {
+            flex: 1;
+            min-height: 600px;
+            z-index: 1;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* Connection Status */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-color);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid rgba(161, 137, 175, 0.3);
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-select:hover {
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(161, 137, 175, 0.2);
+        }
+
+        /* Pothole List */
+        .pothole-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: transparent;
+        }
+
+        .pothole-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(161, 137, 175, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pothole-item:hover {
+            box-shadow: 0 10px 30px rgba(161, 137, 175, 0.3);
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .pothole-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .pothole-item-header h4 {
+            font-size: 1.125rem;
+            color: var(--text-primary);
+        }
+
+        .pothole-item-body {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .pothole-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+        }
+
+        /* Badges */
+        .severity-badge,
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .severity-badge.high {
+            background: var(--high-color);
+            color: white;
+        }
+
+        .severity-badge.medium {
+            background: var(--medium-color);
+            color: white;
+        }
+
+        .severity-badge.low {
+            background: var(--low-color);
+            color: white;
+        }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.in_progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .status-badge.resolved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Status Checkbox */
+        .status-checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .status-checkbox:checked {
+            accent-color: var(--success-color);
+        }
+
+        .status-label {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .header-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .header-content h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-content h2 {
+                font-size: 1rem;
+            }
+
+            .header-stats {
+                grid-template-columns: 1fr;
+            }
+
+            #map {
+                min-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-top">
+                <div class="header-content">
+                    <h1>Riyadh Municipality</h1>
+                    <h2>Pothole Monitoring System - Demo</h2>
+                </div>
+                <a href="index.html" class="logout-btn">← Back to Main Site</a>
+            </div>
+            <div class="header-stats">
+                <div class="stat-card">
+                    <span class="stat-label">Total Potholes</span>
+                    <span class="stat-value" id="totalPotholes">0</span>
+                </div>
+                <div class="stat-card high">
+                    <span class="stat-label">High Priority</span>
+                    <span class="stat-value" id="highCount">0</span>
+                </div>
+                <div class="stat-card medium">
+                    <span class="stat-label">Medium Priority</span>
+                    <span class="stat-value" id="mediumCount">0</span>
+                </div>
+                <div class="stat-card pending">
+                    <span class="stat-label">Pending</span>
+                    <span class="stat-value" id="pendingCount">0</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Map Section -->
+            <section class="map-section">
+                <div class="section-header">
+                    <h3>Riyadh Pothole Map</h3>
+                    <div class="map-controls">
+                        <button class="btn btn-primary" id="testSensorBtn">
+                            <span>Add Random Pothole</span>
+                        </button>
+                        <div class="connection-status">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">Demo Mode</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="map"></div>
+            </section>
+
+            <!-- List Section -->
+            <section class="list-section">
+                <div class="section-header">
+                    <h3>Pothole Details</h3>
+                    <div class="filter-controls">
+                        <select id="severityFilter" class="filter-select">
+                            <option value="all">All Severities</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <select id="statusFilter" class="filter-select">
+                            <option value="all">All Statuses</option>
+                            <option value="pending">Pending</option>
+                            <option value="resolved">Resolved</option>
+                        </select>
+                        <select id="sortBy" class="filter-select">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="depth_high">Depth (High to Low)</option>
+                            <option value="depth_low">Depth (Low to High)</option>
+                            <option value="severity">Severity</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="pothole-list" id="potholeList">
+                    <div class="loading">Loading demo data...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="demo-dashboard.js"></script>
+</body>
+</html>
