@@ -53,7 +53,7 @@ body {
   position: fixed;
   top: 20px;
   left: 50%;
-  width: 80%;  
+  width: 80%;
   transform: translateX(-50%);
   z-index: 10;
   background: rgba(12, 3, 22, 0.7);
@@ -61,7 +61,7 @@ body {
   border-radius: 20px;
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .header-inner {
@@ -81,7 +81,7 @@ body {
 
 .nav-menu a {
   color: var(--silver);
-  padding: 6px 10px; 
+  padding: 6px 10px;
   border-radius: 8px;
   transition: 0.3s;
   text-decoration: none;
@@ -229,7 +229,8 @@ body {
 /* =======================
    Buttons
 ======================= */
-.btn, .btn-outline {
+.btn,
+.btn-outline {
   padding: 10px 18px;
   border-radius: 8px;
   transition: 0.3s;
@@ -369,10 +370,13 @@ body {
 }
 
 @keyframes pulse-question {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
     filter: drop-shadow(0 4px 8px rgba(161, 137, 175, 0.3));
   }
+
   50% {
     transform: scale(1.05);
     filter: drop-shadow(0 6px 12px rgba(161, 137, 175, 0.5));
@@ -577,7 +581,7 @@ body {
 .step-number {
   font-size: 28px;
   font-weight: bold;
-  color: var(--dark);
+  color: white;
 }
 
 .step-content {
@@ -605,9 +609,12 @@ body {
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 8px 25px rgba(161, 137, 175, 0.3);
   }
+
   50% {
     box-shadow: 0 8px 25px rgba(161, 137, 175, 0.6);
     transform: scale(1.05);
@@ -644,7 +651,7 @@ body {
   object-fit: cover;
   border: 3px solid transparent;
   background: linear-gradient(white, white) padding-box,
-              linear-gradient(135deg, var(--purple), var(--silver)) border-box;
+    linear-gradient(135deg, var(--purple), var(--silver)) border-box;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -652,12 +659,55 @@ body {
   transform: scale(1.1);
   box-shadow: 0 8px 20px rgba(161, 137, 175, 0.5);
 }
+
+/* Mobile responsiveness improvements */
+@media (max-width: 640px) {
+  .header {
+    padding: 1rem;
+  }
+
+  .header-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .main-content {
+    padding: 1rem;
+  }
+
+  .section-header {
+    padding: 1rem;
+  }
+
+  .filter-controls {
+    flex-direction: column;
+  }
+
+  .filter-select {
+    width: 100%;
+  }
+
+  .btn {
+    padding: 0.75rem 1rem;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .team-card {
+    padding: 1.5rem;
+  }
+
+  .avatar {
+    width: 80px;
+    height: 80px;
+  }
+}
+
 /* =======================
    Vision 2030 Section
 ======================= */
 .highlight-section {
   background: linear-gradient(135deg, var(--purple), var(--silver));
-  color: var(--dark);          
+  color: var(--dark);
   padding: 40px 20px;
   text-align: center;
   border-radius: 30px;
@@ -727,9 +777,12 @@ body {
 }
 
 @keyframes float-vision {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-8px);
   }
@@ -780,47 +833,68 @@ body {
    Animations & Keyframes
 ======================= */
 @keyframes fadeUp {
-  from {opacity: 0; transform: translateY(20px);}
-  to {opacity: 1; transform: translateY(0);}
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.fade-in {animation: fadeUp 1.2s ease;}
-.fade-up {animation: fadeUp 1.5s ease;}
+.fade-in {
+  animation: fadeUp 1.2s ease;
+}
+
+.fade-up {
+  animation: fadeUp 1.5s ease;
+}
+
 .float {
   animation: float 4s ease-in-out infinite;
 }
 
 @keyframes float {
-  0%,100% {transform: translateY(0);}
-  50% {transform: translateY(-12px);}
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
 }
 
 /* =======================
    Responsive Design
 ======================= */
 @media (max-width: 768px) {
+
   /* About Section */
   .about-content {
     grid-template-columns: 1fr;
     gap: 40px;
     text-align: center;
   }
-  
+
   .big-question-mark {
     font-size: 120px;
   }
-  
+
   .question-text {
     font-size: 28px;
   }
-  
+
   .answer-side {
     padding-left: 0;
     border-left: none;
     border-top: 3px solid var(--purple);
     padding-top: 30px;
   }
-  
+
   .impact-stats {
     justify-content: center;
     flex-wrap: wrap;
@@ -831,7 +905,7 @@ body {
     height: 80px;
     margin-bottom: 15px;
   }
-  
+
   .component-image {
     width: 60px;
     height: 60px;
@@ -844,23 +918,23 @@ body {
     text-align: center;
     transform: translateY(30px);
   }
-  
+
   .step-item.animate,
   .step-item:nth-child(even).animate {
     transform: translateY(0);
   }
-  
+
   .step-content,
   .step-item:nth-child(even) .step-content {
     text-align: center;
     max-width: 100%;
   }
-  
+
   .step-circle {
     width: 60px;
     height: 60px;
   }
-  
+
   .step-number {
     font-size: 24px;
   }
@@ -871,19 +945,19 @@ body {
     gap: 30px;
     text-align: center;
   }
-  
+
   .vision2030-logo {
     width: 120px;
   }
-  
+
   .vision-text {
     text-align: center;
   }
-  
+
   .vision-text h2 {
     font-size: 24px;
   }
-  
+
   .vision-text p {
     font-size: 16px;
   }
@@ -910,20 +984,16 @@ body {
   position: relative;
   width: 100%;
   overflow: hidden;
-  mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent,
-    black 10%,
-    black 90%,
-    transparent
-  );
+  mask-image: linear-gradient(to right,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent);
+  -webkit-mask-image: linear-gradient(to right,
+      transparent,
+      black 10%,
+      black 90%,
+      transparent);
 }
 
 .partners-track {
@@ -969,6 +1039,7 @@ body {
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }

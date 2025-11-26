@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,30 +69,31 @@
             margin-bottom: 1rem;
         }
 
-        .logout-btn {
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 0.5rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-            text-decoration: none;
-            transition: all 0.2s;
+        .logo-link {
+            display: block;
+            transition: all 0.3s;
         }
 
-        .logout-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+        .logo-link:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+
+        .logo-link img {
+            height: 60px;
+            width: auto;
+            object-fit: contain;
         }
 
         .header-content h1 {
             font-size: 2rem;
             margin-bottom: 0.5rem;
+            font-weight: 700;
         }
 
         .header-content h2 {
             font-size: 1.25rem;
-            font-weight: 400;
+            font-weight: 600;
             opacity: 0.95;
         }
 
@@ -235,8 +237,15 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
 
         /* Filter Controls */
@@ -461,6 +470,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
@@ -468,28 +478,24 @@
             <div class="header-top">
                 <div class="header-content">
                     <h1>Riyadh Municipality</h1>
-                    <h2>Pothole Monitoring System - Demo</h2>
+                    <h2>Pothole Monitoring System</h2>
                 </div>
-                <a href="index.html" class="logout-btn">← Back to Main Site</a>
-            </div>
-            <div class="header-stats">
-                <div class="stat-card">
-                    <span class="stat-label">Total Potholes</span>
-                    <span class="stat-value" id="totalPotholes">0</span>
-                </div>
-                <div class="stat-card high">
-                    <span class="stat-label">High Priority</span>
-                    <span class="stat-value" id="highCount">0</span>
-                </div>
-                <div class="stat-card medium">
-                    <span class="stat-label">Medium Priority</span>
-                    <span class="stat-value" id="mediumCount">0</span>
-                </div>
-                <div class="stat-card pending">
-                    <span class="stat-label">Pending</span>
-                    <span class="stat-value" id="pendingCount">0</span>
+                <div class="header-logos" style="display: flex; gap: 1.5rem; align-items: center;">
+                    <img src="RASD  (4).png" alt="RASD Logo" style="height: 60px; width: auto;">
+                    <img src="assets/images/partners/Riyadh municipality logo.png" alt="Riyadh Municipality"
+                        style="height: 60px; width: auto;">
+                    <a href="index.html"
+                        style="text-decoration: none; color: inherit; display: flex; align-items: center; transition: opacity 0.3s;"
+                        onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                    </a>
                 </div>
             </div>
+
         </header>
 
         <!-- Main Content -->
@@ -499,12 +505,9 @@
                 <div class="section-header">
                     <h3>Riyadh Pothole Map</h3>
                     <div class="map-controls">
-                        <button class="btn btn-primary" id="testSensorBtn">
-                            <span>Add Random Pothole</span>
-                        </button>
                         <div class="connection-status">
                             <span class="status-indicator"></span>
-                            <span class="status-text">Demo Mode</span>
+                            <span class="status-text">Live</span>
                         </div>
                     </div>
                 </div>
@@ -514,14 +517,9 @@
             <!-- List Section -->
             <section class="list-section">
                 <div class="section-header">
-                    <h3>Pothole Details</h3>
+                    <h3>Pothole Details <span id="totalPotholesCount"
+                            style="color: var(--primary-color); font-weight: 700;">(1)</span></h3>
                     <div class="filter-controls">
-                        <select id="severityFilter" class="filter-select">
-                            <option value="all">All Severities</option>
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>
-                        </select>
                         <select id="statusFilter" class="filter-select">
                             <option value="all">All Statuses</option>
                             <option value="pending">Pending</option>
@@ -537,12 +535,35 @@
                     </div>
                 </div>
                 <div class="pothole-list" id="potholeList">
-                    <div class="loading">Loading demo data...</div>
+                    <div class="pothole-item" data-id="1">
+                        <div class="pothole-item-header">
+                            <h4>Pothole #1</h4>
+                        </div>
+                        <div class="pothole-item-body">
+                            <div class="pothole-info">
+                                <div class="info-row">
+                                    <span class="info-label">Resolved?</span>
+                                    <div class="status-checkbox-container">
+                                        <input type="checkbox" class="status-checkbox" id="status-1">
+                                    </div>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Location:</span>
+                                    <span class="info-value">24.805346, 46.662148</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Detected:</span>
+                                    <span class="info-value">Nov 25, 2025, 11:59 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <script src="demo-dashboard.js"></script>
+    <script src="../scripts/demo-dashboard.js"></script>
 </body>
+
 </html>

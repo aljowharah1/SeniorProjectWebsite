@@ -3,17 +3,16 @@ let map;
 let markers = {};
 let potholes = [];
 let currentFilters = {
-    severity: 'all',
     status: 'all',
     sort: 'newest'
 };
 let nextId = 1;
 
-// Severity colors for markers and UI
-const SEVERITY_COLORS = {
-    high: '#ea580c',
-    medium: '#fdc722',
-    low: '#84cc16'
+// Detection type colors for markers
+const DETECTION_COLORS = {
+    Camera: '#3b82f6',
+    LiDAR: '#10b981',
+    Both: '#8b5cf6'
 };
 
 const STATUS_LABELS = {
@@ -37,8 +36,8 @@ function initMap() {
 }
 
 // Create custom marker icon
-function createMarkerIcon(severity) {
-    const color = SEVERITY_COLORS[severity] || SEVERITY_COLORS.low;
+function createMarkerIcon(detectionType) {
+    const color = DETECTION_COLORS[detectionType] || DETECTION_COLORS.Camera;
 
     return L.divIcon({
         className: 'custom-marker',
@@ -60,15 +59,15 @@ function createMarkerIcon(severity) {
 // Add pothole marker to map
 function addPotholeMarker(pothole) {
     const marker = L.marker([pothole.latitude, pothole.longitude], {
-        icon: createMarkerIcon(pothole.severity)
+        icon: createMarkerIcon(pothole.detectionType)
     }).addTo(map);
 
     // Create popup content
     const popupContent = `
         <div style="padding: 0.5rem;">
             <h4 style="margin-bottom: 0.5rem;">Pothole #${pothole.id}</h4>
-            <p style="margin: 0.25rem 0; font-size: 0.875rem;"><strong>Depth:</strong> ${pothole.depth.toFixed(2)} cm</p>
-            <p style="margin: 0.25rem 0; font-size: 0.875rem;"><strong>Severity:</strong> <span class="severity-badge ${pothole.severity}">${pothole.severity.toUpperCase()}</span></p>
+            <p style="margin: 0.25rem 0; font-size: 0.875rem;"><strong>Detection:</strong> ${pothole.detectionType}</p>
+            <p style="margin: 0.25rem 0; font-size: 0.875rem;"><strong>Confidence:</strong> ${pothole.confidence.toFixed(1)}%</p>
             <p style="margin: 0.25rem 0; font-size: 0.875rem;"><strong>Status:</strong> ${STATUS_LABELS[pothole.status]}</p>
             <p style="margin: 0.25rem 0; font-size: 0.875rem;"><strong>Detected:</strong> ${formatDate(pothole.timestamp)}</p>
         </div>
@@ -106,17 +105,22 @@ function getInterventionText(severity) {
 // Render pothole list
 function renderPotholeList() {
     const listContainer = document.getElementById('potholeList');
+    console.log('🔍 renderPotholeList called. Potholes array length:', potholes.length);
+    console.log('🔍 List container:', listContainer);
+
+    if (!listContainer) {
+        console.error('❌ potholeList element not found!');
+        return;
+    }
 
     // Apply filters
     let filteredPotholes = potholes.filter(p => {
-        if (currentFilters.severity !== 'all' && p.severity !== currentFilters.severity) {
-            return false;
-        }
         if (currentFilters.status !== 'all' && p.status !== currentFilters.status) {
             return false;
         }
         return true;
     });
+    console.log('🔍 Filtered potholes:', filteredPotholes.length);
 
     // Apply sorting
     filteredPotholes.sort((a, b) => {
@@ -138,23 +142,18 @@ function renderPotholeList() {
     });
 
     if (filteredPotholes.length === 0) {
-        listContainer.innerHTML = '<div style="padding: 2rem; text-align: center; color: #6b7280;">No potholes found. Click "Add Random Pothole" to see demo data.</div>';
+        listContainer.innerHTML = '<div style="padding: 2rem; text-align: center; color: #6b7280;">No potholes found.</div>';
         return;
     }
 
     // Render list items
-    listContainer.innerHTML = filteredPotholes.map(pothole => `
+    const htmlContent = filteredPotholes.map(pothole => `
         <div class="pothole-item" data-id="${pothole.id}">
             <div class="pothole-item-header">
                 <h4>Pothole #${pothole.id}</h4>
-                <span class="severity-badge ${pothole.severity}">${pothole.severity.toUpperCase()}</span>
             </div>
             <div class="pothole-item-body">
                 <div class="pothole-info">
-                    <div class="info-row">
-                        <span class="info-label">Depth:</span>
-                        <span class="info-value">${pothole.depth.toFixed(2)} cm</span>
-                    </div>
                     <div class="info-row">
                         <span class="info-label">Resolved?</span>
                         <div class="status-checkbox-container">
@@ -179,30 +178,46 @@ function renderPotholeList() {
             </div>
         </div>
     `).join('');
+
+    console.log('🔍 Generated HTML length:', htmlContent.length);
+    console.log('🔍 Setting innerHTML now...');
+    listContainer.innerHTML = htmlContent;
+    console.log('✅ innerHTML set. Current innerHTML length:', listContainer.innerHTML.length);
 }
 
 // Update statistics
 function updateStatistics() {
-    const stats = {
-        total: potholes.length,
-        high: potholes.filter(p => p.severity === 'high').length,
-        medium: potholes.filter(p => p.severity === 'medium').length,
-        pending: potholes.filter(p => p.status === 'pending').length
-    };
+    const totalCount = potholes.length;
 
-    document.getElementById('totalPotholes').textContent = stats.total;
-    document.getElementById('highCount').textContent = stats.high;
-    document.getElementById('mediumCount').textContent = stats.medium;
-    document.getElementById('pendingCount').textContent = stats.pending;
+    // Update total count next to "Pothole Details" heading
+    const totalCountElement = document.getElementById('totalPotholesCount');
+    if (totalCountElement) {
+        totalCountElement.textContent = `(${totalCount})`;
+    }
 }
 
 // Toggle pothole status (checkbox function)
-function togglePotholeStatus(id, isResolved) {
+async function togglePotholeStatus(id, isResolved) {
     const pothole = potholes.find(p => p.id === id);
     if (pothole) {
-        pothole.status = isResolved ? 'resolved' : 'pending';
-        renderPotholeList();
-        updateStatistics();
+        const newStatus = isResolved ? 'resolved' : 'pending';
+
+        try {
+            const response = await fetch(`/api/potholes/${id}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                pothole.status = newStatus;
+                renderPotholeList();
+                updateStatistics();
+            }
+        } catch (error) {
+            console.error('Error updating status:', error);
+        }
     }
 }
 
@@ -255,17 +270,25 @@ function addRandomPothole() {
 
 // Generate initial demo data
 function generateInitialData() {
-    // Generate 10 random potholes
-    for (let i = 0; i < 10; i++) {
-        const pothole = generateRandomPothole();
-        potholes.push(pothole);
-        addPotholeMarker(pothole);
-    }
+    // Add ONLY the specific pothole with given coordinates
+    const specificPothole = {
+        id: 1,
+        latitude: 24.80534553,
+        longitude: 46.66214752,
+        depth: 4.5,
+        severity: 'medium',
+        status: 'pending',
+        timestamp: new Date().toISOString(),
+        sensor_id: 'RASD-001'
+    };
+    potholes.push(specificPothole);
+    addPotholeMarker(specificPothole);
+
+    console.log('✅ Added 1 pothole with coordinates:', specificPothole.latitude, specificPothole.longitude);
 
     renderPotholeList();
     updateStatistics();
 }
-
 // Event listeners
 document.addEventListener('DOMContentLoaded', () => {
     // Check if logged in (simple demo check)
@@ -278,17 +301,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize map
     initMap();
 
-    // Generate initial demo data
-    setTimeout(() => {
-        generateInitialData();
-    }, 500);
+    // If running as a local file (file:// protocol), load demo data immediately
+    if (window.location.protocol === 'file:') {
+        console.log('📁 Running as local file - loading demo data');
+        // Use setTimeout to ensure DOM is fully ready
+        setTimeout(() => {
+            console.log('⏱️ Executing generateInitialData after timeout');
+            generateInitialData();
+        }, 100);
+    } else {
+        // Load real data from backend only if running on a server
+        loadPotholes();
+        // Refresh data every 5 seconds
+        setInterval(loadPotholes, 5000);
+    }
 
     // Filter controls
-    document.getElementById('severityFilter').addEventListener('change', (e) => {
-        currentFilters.severity = e.target.value;
-        renderPotholeList();
-    });
-
     document.getElementById('statusFilter').addEventListener('change', (e) => {
         currentFilters.status = e.target.value;
         renderPotholeList();
@@ -298,7 +326,35 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFilters.sort = e.target.value;
         renderPotholeList();
     });
-
-    // Test sensor button - adds random pothole
-    document.getElementById('testSensorBtn').addEventListener('click', addRandomPothole);
 });
+
+// Load potholes from backend API
+async function loadPotholes() {
+    try {
+        const response = await fetch('/api/potholes');
+        const result = await response.json();
+
+        if (result.success) {
+            // Clear old markers
+            Object.values(markers).forEach(marker => map.removeLayer(marker));
+            markers = {};
+
+            // Update potholes array
+            potholes = result.data;
+            nextId = potholes.length > 0 ? Math.max(...potholes.map(p => p.id)) + 1 : 1;
+
+            // Add new markers
+            potholes.forEach(pothole => addPotholeMarker(pothole));
+
+            // Update UI
+            renderPotholeList();
+            updateStatistics();
+        }
+    } catch (error) {
+        console.log('⚠️ API not available, using demo data');
+        // If API fails, load demo data instead
+        if (potholes.length === 0) {
+            generateInitialData();
+        }
+    }
+}

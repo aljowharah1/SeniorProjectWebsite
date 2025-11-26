@@ -1,0 +1,15 @@
+[
+    {
+        "id": 1,
+        "latitude": 24.80534553,
+        "longitude": 46.66214752,
+        "depth": 4.5,
+        "severity": "medium",
+        "status": "pending",
+        "timestamp": "2025-11-25T08:59:00.000Z",
+        "detection_type": "Camera",
+        "camera_confidence": 85.5,
+        "lidar_confidence": null,
+        "sensor_id": "RASD-001"
+    }
+]
