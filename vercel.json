@@ -1,0 +1,41 @@
+{
+    "version": 2,
+    "builds": [
+        {
+            "src": "backend/server.js",
+            "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "backend/server.js"
+        },
+        {
+            "src": "/pages/(.*)",
+            "dest": "/pages/$1"
+        },
+        {
+            "src": "/assets/(.*)",
+            "dest": "/assets/$1"
+        },
+        {
+            "src": "/scripts/(.*)",
+            "dest": "/scripts/$1"
+        },
+        {
+            "src": "/media/(.*)",
+            "dest": "/media/$1"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/public/$1"
+        }
+    ],
+    "rewrites": [
+        {
+            "source": "/",
+            "destination": "/public/index.html"
+        }
+    ]
+}
