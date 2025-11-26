@@ -170,7 +170,7 @@
         .main-content {
             flex: 1;
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 350px 1fr;
             gap: 1.5rem;
             padding: 1.5rem;
         }
@@ -500,21 +500,7 @@
 
         <!-- Main Content -->
         <main class="main-content">
-            <!-- Map Section -->
-            <section class="map-section">
-                <div class="section-header">
-                    <h3>Riyadh Pothole Map</h3>
-                    <div class="map-controls">
-                        <div class="connection-status">
-                            <span class="status-indicator"></span>
-                            <span class="status-text">Live</span>
-                        </div>
-                    </div>
-                </div>
-                <div id="map"></div>
-            </section>
-
-            <!-- List Section -->
+            <!-- List Section (Left Sidebar) -->
             <section class="list-section">
                 <div class="section-header">
                     <h3>Pothole Details <span id="totalPotholesCount"
@@ -559,6 +545,20 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <!-- Map Section (Right Side) -->
+            <section class="map-section">
+                <div class="section-header">
+                    <h3>Riyadh Pothole Map</h3>
+                    <div class="map-controls">
+                        <div class="connection-status">
+                            <span class="status-indicator"></span>
+                            <span class="status-text">Live</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="map"></div>
             </section>
         </main>
     </div>
